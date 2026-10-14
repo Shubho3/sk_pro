@@ -7,7 +7,7 @@ import '../../../core/models/payment.dart';
 import '../../../core/models/product.dart';
 import '../../../core/providers/auth_providers.dart';
 import '../../../core/providers/repository_providers.dart';
-import '../../widgets/quantity_stepper.dart';
+import '../../widgets/sales_product_card.dart';
 import '../../widgets/status_views.dart';
 
 final _currency = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
@@ -133,18 +133,13 @@ class _WalkInSaleScreenState extends ConsumerState<WalkInSaleScreen> {
               ),
               const SizedBox(height: 16),
               for (final p in products)
-                Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: ListTile(
-                    title: Text(p.name),
-                    subtitle: Text('${_currency.format(p.price)} / ${p.unit}'),
-                    trailing: QuantityStepper(
-                      value: _qty[p.id] ?? 0,
-                      showPresets: true,
-                      onChanged: (newQty) =>
-                          setState(() => _qty[p.id] = newQty),
-                    ),
-                  ),
+                SalesProductCard(
+                  product: p,
+                  quantity: _qty[p.id] ?? 0,
+                  currency: _currency,
+                  showPresets: true,
+                  onQuantityChanged: (newQty) =>
+                      setState(() => _qty[p.id] = newQty),
                 ),
             ],
           );

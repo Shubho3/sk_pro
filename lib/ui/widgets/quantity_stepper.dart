@@ -97,9 +97,12 @@ class QuantityStepper extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         controls,
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         Wrap(
           spacing: 4,
+          runSpacing: 4,
+          alignment: WrapAlignment.end,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             _PresetChip(label: '+1', onTap: () => _increment(1)),
             _PresetChip(label: '+5', onTap: () => _increment(5)),
@@ -131,31 +134,34 @@ class _PresetChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: isDestructive
-              ? theme.colorScheme.errorContainer.withValues(alpha: 0.5)
-              : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          decoration: BoxDecoration(
             color: isDestructive
-                ? theme.colorScheme.error.withValues(alpha: 0.3)
-                : theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-            width: 0.8,
+                ? theme.colorScheme.errorContainer.withValues(alpha: 0.5)
+                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isDestructive
+                  ? theme.colorScheme.error.withValues(alpha: 0.3)
+                  : theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
+              width: 0.8,
+            ),
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            color: isDestructive
-                ? theme.colorScheme.error
-                : theme.colorScheme.onSurfaceVariant,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: isDestructive
+                  ? theme.colorScheme.error
+                  : theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ),

@@ -78,30 +78,34 @@ class _OfficeHomeViewState extends ConsumerState<OfficeHomeView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    companyName.isEmpty ? 'Corporate Client' : companyName,
-                    style: const TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w900,
-                      fontSize: 22,
-                      letterSpacing: -0.5,
-                      color: Color(0xFF1E2530),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      companyName.isEmpty ? 'Corporate Client' : companyName,
+                      style: const TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w900,
+                        fontSize: 22,
+                        letterSpacing: -0.5,
+                        color: Color(0xFF1E2530),
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    DateFormat('EEEE, d MMMM yyyy').format(DateTime.now()),
-                    style: const TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF64748B),
+                    const SizedBox(height: 2),
+                    Text(
+                      DateFormat('EEEE, d MMMM yyyy').format(DateTime.now()),
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF64748B),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
@@ -477,26 +481,32 @@ class _HeroBalanceCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_month_rounded,
-                    color: Colors.white70,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${currentMonthName.toUpperCase()} SUBSCRIPTION',
-                    style: const TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
+              Expanded(
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_month_rounded,
                       color: Colors.white70,
+                      size: 16,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        '${currentMonthName.toUpperCase()} SUBSCRIPTION',
+                        style: const TextStyle(
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.8,
+                          color: Colors.white70,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
@@ -665,7 +675,7 @@ class _DailyDeliveriesCardState extends State<_DailyDeliveriesCard> {
     );
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -678,71 +688,129 @@ class _DailyDeliveriesCardState extends State<_DailyDeliveriesCard> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          // Header Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF06030).withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.delivery_dining_rounded,
-                      color: Color(0xFFF06030),
-                      size: 22,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Daily Deliveries',
-                        style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF1E2530),
-                        ),
-                      ),
-                      Text(
-                        'Who delivered and items received today',
-                        style: TextStyle(fontSize: 11.5, color: Color(0xFF64748B)),
-                      ),
-                    ],
-                  ),
-                ],
+          // Background delivery watermark icon
+          Positioned(
+            right: -10,
+            top: 4,
+            child: Opacity(
+              opacity: 0.04,
+              child: const Icon(
+                Icons.delivery_dining_rounded,
+                size: 96,
+                color: Color(0xFF1E2530),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: todaysDeliveries.isNotEmpty
-                      ? const Color(0xFF10B981).withValues(alpha: 0.12)
-                      : const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+          // Top-right ribbon badge for deliveries counter (never interferes with title)
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+              decoration: BoxDecoration(
+                color: todaysDeliveries.isNotEmpty
+                    ? const Color(0xFF10B981).withValues(alpha: 0.12)
+                    : const Color(0xFFF1F5F9),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
                 ),
-                child: Text(
-                  '${todaysDeliveries.length} Today ($totalItemsToday pcs)',
-                  style: TextStyle(
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w800,
+                border: Border(
+                  bottom: BorderSide(
+                    color: todaysDeliveries.isNotEmpty
+                        ? const Color(0xFF10B981).withValues(alpha: 0.25)
+                        : const Color(0xFFE2E8F0),
+                  ),
+                  left: BorderSide(
+                    color: todaysDeliveries.isNotEmpty
+                        ? const Color(0xFF10B981).withValues(alpha: 0.25)
+                        : const Color(0xFFE2E8F0),
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    todaysDeliveries.isNotEmpty
+                        ? Icons.check_circle_rounded
+                        : Icons.schedule_rounded,
+                    size: 12,
                     color: todaysDeliveries.isNotEmpty
                         ? const Color(0xFF047857)
                         : const Color(0xFF64748B),
                   ),
-                ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${todaysDeliveries.length} Today ($totalItemsToday pcs)',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w800,
+                      color: todaysDeliveries.isNotEmpty
+                          ? const Color(0xFF047857)
+                          : const Color(0xFF64748B),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-          const SizedBox(height: 16),
+          // Main content
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header Row (title and subtitle take full width, with right margin for ribbon)
+                Padding(
+                  padding: const EdgeInsets.only(right: 80),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF06030).withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.delivery_dining_rounded,
+                          color: Color(0xFFF06030),
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Daily Deliveries',
+                              style: TextStyle(
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF1E2530),
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Who delivered and items received today',
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                color: Color(0xFF64748B),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
 
           // Today's deliveries list
           if (todaysDeliveries.isEmpty)
@@ -792,22 +860,28 @@ class _DailyDeliveriesCardState extends State<_DailyDeliveriesCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.person_pin_rounded,
-                                  size: 16, color: Color(0xFFF06030)),
-                              const SizedBox(width: 6),
-                              Text(
-                                'Delivered by $helperName',
-                                style: const TextStyle(
-                                  fontFamily: 'Plus Jakarta Sans',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 13,
-                                  color: Color(0xFF1E2530),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.person_pin_rounded,
+                                    size: 16, color: Color(0xFFF06030)),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    'Delivered by $helperName',
+                                    style: const TextStyle(
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13,
+                                      color: Color(0xFF1E2530),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           Text(
                             timeStr,
                             style: const TextStyle(
@@ -847,16 +921,20 @@ class _DailyDeliveriesCardState extends State<_DailyDeliveriesCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            req.paymentMode == PaymentMode.addToBill
-                                ? 'Added to subscription'
-                                : 'Paid at delivery',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF64748B),
+                          Expanded(
+                            child: Text(
+                              req.paymentMode == PaymentMode.addToBill
+                                  ? 'Added to subscription'
+                                  : 'Paid at delivery',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF64748B),
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          const SizedBox(width: 8),
                           Text(
                             _currency.format(req.total),
                             style: const TextStyle(
@@ -967,9 +1045,12 @@ class _DailyDeliveriesCardState extends State<_DailyDeliveriesCard> {
                   );
                 }).toList(),
               ),
+            ],
           ],
-        ],
+        ),
       ),
-    );
+    ],
+  ),
+);
   }
 }

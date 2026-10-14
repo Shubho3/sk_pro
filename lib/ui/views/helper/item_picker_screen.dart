@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../core/models/item_request.dart';
 import '../../../core/models/payment.dart';
 import '../../../core/providers/repository_providers.dart';
-import '../../widgets/quantity_stepper.dart';
+import '../../widgets/sales_product_card.dart';
 import '../../widgets/status_views.dart';
 
 final _currency = NumberFormat.currency(locale: 'en_IN', symbol: '\u20b9');
@@ -94,17 +94,13 @@ class _ItemPickerScreenState extends ConsumerState<ItemPickerScreen> {
             itemBuilder: (context, index) {
               final p = products[index];
               final qty = _qty[p.id] ?? 0;
-              return Card(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: ListTile(
-                  title: Text(p.name),
-                  subtitle: Text('${_currency.format(p.price)} / ${p.unit}'),
-                  trailing: QuantityStepper(
-                    value: qty,
-                    showPresets: true,
-                    onChanged: (newQty) => setState(() => _qty[p.id] = newQty),
-                  ),
-                ),
+              return SalesProductCard(
+                product: p,
+                quantity: qty,
+                currency: _currency,
+                showPresets: true,
+                onQuantityChanged: (newQty) =>
+                    setState(() => _qty[p.id] = newQty),
               );
             },
           );
