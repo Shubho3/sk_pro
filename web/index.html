@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <!--
+    `interactive-widget=overlays-content` makes the on-screen keyboard OVERLAY
+    the page instead of resizing the layout viewport, so the app does not
+    fold / shrink / distort when the keyboard opens and there is nothing to
+    "restore" when it closes. `maximum-scale=1.0, user-scalable=no` stops iOS
+    from auto-zooming into a focused input (another source of distortion).
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=overlays-content">
+  <meta name="description" content="Indore Chai Company - manage inventory, company clients, bills and complaints from one web app.">
+  <meta name="theme-color" content="#F06030">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Indore Chai Company">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Indore Chai Company</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <style>
+    html, body {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100%;
+      height: 100dvh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: manipulation;
+      -webkit-text-size-adjust: 100%;
+      background: #F5F0EC;
+    }
+    flt-glass-pane {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+    #boot-splash {
+      position: fixed; inset: 0; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      background: #F5F0EC; transition: opacity 250ms ease-out;
+    }
+    #boot-splash img { width: 128px; height: 128px; }
+  </style>
+  <div id="boot-splash"><img src="icons/Icon-512.png" alt="Indore Chai Company"></div>
+  <script>
+    // Enforce overlays-content on viewport meta even if Flutter engine resets it
+    function enforceViewport() {
+      var meta = document.querySelector('meta[name="viewport"]');
+      var desired = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=overlays-content';
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'viewport';
+        document.head.appendChild(meta);
+      }
+      if (meta.content !== desired) {
+        meta.content = desired;
+      }
+    }
+    enforceViewport();
+    var viewportObserver = new MutationObserver(enforceViewport);
+    viewportObserver.observe(document.head, { childList: true, subtree: true, attributes: true });
+
+    // Prevent Android Chrome from remaining folded/scrolled after keyboard dismiss
+    function resetWindowScroll() {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0);
+      }
+      if (document.body.scrollTop !== 0) {
+        document.body.scrollTop = 0;
+      }
+      if (document.documentElement.scrollTop !== 0) {
+        document.documentElement.scrollTop = 0;
+      }
+    }
+    window.addEventListener('focusout', resetWindowScroll);
+    window.addEventListener('blur', resetWindowScroll);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', resetWindowScroll);
+      window.visualViewport.addEventListener('scroll', resetWindowScroll);
+    }
+    window.addEventListener('resize', resetWindowScroll);
+
+    // Flutter fires this on window once it has painted; fade the splash out.
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('boot-splash');
+      if (!el) return;
+      el.style.opacity = '0';
+      setTimeout(function () { el.remove(); }, 250);
+    });
+  </script>
+  <!--
+    You can customize the "flutter_bootstrap.js" script.
+    This is useful to provide a custom configuration to the Flutter loader
+    or to give the user feedback during the initialization process.
+
+    For more details:
+    * https://docs.flutter.dev/platform-integration/web/initialization
+  -->
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
