@@ -85,12 +85,13 @@ void main() {
       outstanding: 2400.0,
     );
 
-    const testInvoice = Invoice(
+    final nowKey = DateFormat('yyyy-MM').format(DateTime.now());
+    final testInvoice = Invoice(
       id: 1,
       companyId: 1,
       companyName: 'Alpha Systems',
-      month: '2026-09',
-      lines: [
+      month: nowKey,
+      lines: const [
         InvoiceLine(description: 'Cutting Chai', qty: 20, unitPrice: 15.0),
       ],
       paid: 0,
